@@ -1,0 +1,16 @@
+{
+  "name": "d20ql",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "juusaw",
+  "license": "MIT",
+  "dependencies": {
+    "apollo-server": "^2.4.0",
+    "graphql": "^14.1.1",
+    "ts-node": "^8.0.2",
+    "typescript": "^3.3.3"
+  },
+  "scripts": {
+    "start": "ts-node src/index.ts"
+  }
+}
