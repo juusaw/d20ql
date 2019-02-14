@@ -23,11 +23,28 @@ function calculateMean(multiplier: number, sides: number, constant: number) {
   return multiplier * (sides + 1) / 2 + constant
 }
 
+function calculateMax(multiplier: number, sides: number, constant: number) {
+  return multiplier * sides + constant
+}
+
+function calculateMin(multiplier: number, sides: number, constant: number) {
+  return multiplier + constant
+}
+
+const RollStatsType =  new GraphQLObjectType({
+  name: 'Statistics',
+  fields: {
+    average: { type: GraphQLFloat, resolve: (parent: {dice: Dice}) => calculateMean(...parent.dice) },
+    max: { type: GraphQLInt, resolve: (parent: {dice: Dice}) => calculateMax(...parent.dice)},
+    min: { type: GraphQLInt, resolve: (parent: {dice: Dice}) => calculateMin(...parent.dice)}
+  }
+})
+
 const RollResultType = new GraphQLObjectType({
   name: 'Roll',
   fields: {
     result: { type: GraphQLInt, resolve: (parent: {dice: Dice}) => countResult(...parent.dice) },
-    statistics: { type: GraphQLFloat, resolve: (parent: {dice: Dice}) => calculateMean(...parent.dice) }
+    statistics: { type: RollStatsType, resolve: parent => parent }
   }
 })
 
