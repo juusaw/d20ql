@@ -10,7 +10,6 @@ function parseDice(inputStr: string): Dice[] {
   // TODO: Add starting constant without + or - case to consts
   const dice = diceStrs.map(ds => ds.split('d').map(d => parseInt(d, 10)) as Dice)
   const constDice = constStrs.map(cs => [parseInt(cs, 10), 1] as Dice)
-  console.log(constDice)
   return dice.concat(constDice)
 }
 
@@ -26,20 +25,24 @@ function calculateMean(dice: Dice[]) {
     .reduce((a, b) => a + b, 0)
 }
 
-// function calculateMax(multiplier: number, sides: number, constant: number) {
-//   return multiplier * sides + constant
-// }
+function calculateMax(dice: Dice[]) {
+  return dice
+    .map(([multiplier, sides]) => multiplier * (multiplier > 0 ? sides : 1))
+    .reduce((a, b) => a + b, 0)
+}
 
-// function calculateMin(multiplier: number, sides: number, constant: number) {
-//   return multiplier + constant
-// }
+function calculateMin(dice: Dice[]) {
+  return dice
+    .map(([multiplier, sides]) => multiplier * (multiplier > 0 ? 1 : sides))
+    .reduce((a, b) => a + b, 0)
+}
 
 const RollStatsType =  new GraphQLObjectType({
   name: 'Statistics',
   fields: {
     average: { type: GraphQLFloat, resolve: (parent: {roll: Dice[]}) => calculateMean(parent.roll) },
-    max: { type: GraphQLInt, resolve: (parent: {roll: Dice[]}) => calculateMean(parent.roll)},
-    min: { type: GraphQLInt, resolve: (parent: {roll: Dice[]}) => calculateMean(parent.roll)}
+    max: { type: GraphQLInt, resolve: (parent: {roll: Dice[]}) => calculateMax(parent.roll)},
+    min: { type: GraphQLInt, resolve: (parent: {roll: Dice[]}) => calculateMin(parent.roll)}
   }
 })
 
