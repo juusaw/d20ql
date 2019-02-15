@@ -96,7 +96,11 @@ const schema = new GraphQLSchema({
   })
 })
 
-const server = new ApolloServer({ schema })
+const server = new ApolloServer({
+  schema,
+  introspection: true,
+  playground: true
+})
 
 server.listen().then(({ url }) => {
   console.log(`🚀 Server ready at ${url}`);
