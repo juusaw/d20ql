@@ -1,1 +1,8 @@
-{}
+{
+  "version": 2,
+  "name": "d20ql",
+  "builds": [
+      { "src": "./src/**/*.ts", "use": "@now/node-server@canary" }
+  ],
+  "routes": [{ "src": "/.*", "dest": "./src/index.ts" }]
+}
