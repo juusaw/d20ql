@@ -16,7 +16,8 @@ import {
   calculateMean,
   calculateMin,
   rollDice,
-  countResult
+  countResult,
+  getDistribution
 } from './dice'
 
 interface RollStatsParent extends RollParent {}
@@ -34,6 +35,10 @@ const RollStatsType =  new GraphQLObjectType({
     min: {
       type: new GraphQLNonNull(GraphQLInt),
       resolve: (parent: RollStatsParent) => calculateMin(parent.roll)
+    },
+    distribution: {
+      type: new GraphQLList(GraphQLInt),
+      resolve: (parent: RollStatsParent) => getDistribution(parent.roll)
     }
   }
 })
