@@ -14,7 +14,9 @@ const roll = (sides: number) => Math.floor(Math.random() * sides + 1)
 
 export function rollDice(dice: Dice[]) {
   return dice.flatMap(([multiplier, sides]) => {
-    return new Array(multiplier).fill(undefined).map(() => roll(sides))
+    return new Array(Math.abs(multiplier))
+      .fill(undefined)
+      .map(() => multiplier / Math.abs(multiplier) * roll(sides))
   })
 }
 
