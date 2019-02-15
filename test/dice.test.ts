@@ -8,7 +8,8 @@ test('Parser', () => {
     { string: '-2d20+5', result: [{ amount: -2, sides: 20 }, { amount: 5, sides: 1 }] },
     { string: '3d8-10', result: [{ amount: 3, sides: 8}, { amount: -10, sides: 1 }] },
     { string: '3dd', result: null },
-    { string: '1d6+-1', result: null }
+    { string: '1d6+-1', result: null },
+    { string: 'd6', result: [{ amount: 1, sides: 6 }]}
   ]
   cases.forEach(({ string, result }) =>
     expect(dice.parseDice(string)).toEqual(result))

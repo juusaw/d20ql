@@ -35,7 +35,7 @@ export function parseDice(inputStr: string): Dice[] | null {
     .concat((inputStr.match(/(^\d+)[+|-]/) || []).slice(1)) // leading
   const dice = diceStrs.map(ds => {
     const [amount, sides] = ds.split('d').map(d => parseInt(d, 10))
-    return { amount, sides }
+    return { amount: Number.isNaN(amount) ? 1 : amount, sides }
   })    
   const constDice = constStrs.map(cs => ({amount: parseInt(cs, 10), sides: 1}))
   return dice.concat(constDice)
