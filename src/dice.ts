@@ -16,7 +16,12 @@ export interface DieRoll extends Die {
   result: number
 }
 
-export function parseDice(inputStr: string): Dice[] {
+function validateDiceString(input: string): boolean {
+  return /^([+|-]?\d*d?\d+)([+|-]\d*d?\d+)*$/.test(input)
+}
+
+export function parseDice(inputStr: string): Dice[] | null {
+  if (!validateDiceString(inputStr)) return null
   const diceStrs = inputStr.match(/([+|-]?\d*d\d+)/g) || []
   const constStrs = (inputStr.match(/([\+|-]\d+)[+|-]/g) || []).map(x => x.slice(0, -1))
     .concat((inputStr.match(/([\+|-]\d+)$/) || []).slice(1)) // trailing
@@ -39,10 +44,8 @@ export function rollDice(dice: Dice[]): DieRoll[] {
   })
 }
 
-export function countResult(dice: Dice[]) {
-  return dice
-    .map(({amount, sides}) => amount * Math.floor(Math.random() * sides + 1))
-    .reduce((a, b) => a + b, 0)
+export function countResult(dice: DieRoll[]) {
+  return dice.reduce((a, { result }) => a + result, 0)
 }
 
 export function calculateMean(dice: Dice[]) {

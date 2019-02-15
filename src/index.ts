@@ -8,7 +8,16 @@ import {
   GraphQLFloat,
   GraphQLList
 } from 'graphql'
-import { Dice, parseDice, calculateMax, calculateMean, calculateMin, rollDice, DieRoll } from './dice'
+import {
+  Dice,
+  DieRoll,
+  parseDice,
+  calculateMax,
+  calculateMean,
+  calculateMin,
+  rollDice,
+  countResult
+} from './dice'
 
 interface RollStatsParent extends RollParent {}
 const RollStatsType =  new GraphQLObjectType({
@@ -24,7 +33,7 @@ interface RollResultParent extends RollParent { rollResult: DieRoll[] }
 const RollResultType = new GraphQLObjectType({
   name: 'Results',
   fields: {
-    total: { type: GraphQLInt, resolve: (parent: RollResultParent) => parent.rollResult.reduce((a, { result }) => a + result, 0)},
+    total: { type: GraphQLInt, resolve: (parent: RollResultParent) => countResult(parent.rollResult)},
     details: { type: new GraphQLList(GraphQLInt), resolve: (parent: RollResultParent) => parent.rollResult.map(({result}) => result) }
   }
 })
@@ -51,7 +60,11 @@ const schema = new GraphQLSchema({
             type: new GraphQLNonNull(GraphQLString) 
           }
         },
-        resolve: (_, args) => ({roll: parseDice(args.dice)})
+        resolve: (_, args) => {
+          const roll = parseDice(args.dice)
+          if (!roll) return null
+          else return { roll }
+        }
       }
     }
   })
