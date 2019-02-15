@@ -1,4 +1,4 @@
-import { ApolloServer } from 'apollo-server'
+import { ApolloServer } from 'apollo-server-micro'
 import {
   GraphQLSchema,
   GraphQLObjectType,
@@ -19,6 +19,7 @@ import {
   countResult,
   getDistribution
 } from './dice'
+
 
 interface RollStatsParent extends RollParent {}
 const RollStatsType =  new GraphQLObjectType({
@@ -102,8 +103,4 @@ const server = new ApolloServer({
   playground: true
 })
 
-server.listen().then(({ url }) => {
-  console.log(`🚀 Server ready at ${url}`);
-})
-
-export default server
+export default server.createHandler()
