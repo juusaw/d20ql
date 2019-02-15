@@ -23,9 +23,18 @@ interface RollStatsParent extends RollParent {}
 const RollStatsType =  new GraphQLObjectType({
   name: 'Statistics',
   fields: {
-    average: { type: GraphQLFloat, resolve: (parent: RollStatsParent) => calculateMean(parent.roll) },
-    max: { type: GraphQLInt, resolve: (parent: RollStatsParent) => calculateMax(parent.roll)},
-    min: { type: GraphQLInt, resolve: (parent: RollStatsParent) => calculateMin(parent.roll)}
+    average: {
+      type: new GraphQLNonNull(GraphQLFloat),
+      resolve: (parent: RollStatsParent) => calculateMean(parent.roll)
+    },
+    max: {
+      type: new GraphQLNonNull(GraphQLInt),
+      resolve: (parent: RollStatsParent) => calculateMax(parent.roll)
+    },
+    min: {
+      type: new GraphQLNonNull(GraphQLInt),
+      resolve: (parent: RollStatsParent) => calculateMin(parent.roll)
+    }
   }
 })
 
@@ -33,8 +42,14 @@ interface RollResultParent extends RollParent { rollResult: DieRoll[] }
 const RollResultType = new GraphQLObjectType({
   name: 'Results',
   fields: {
-    total: { type: GraphQLInt, resolve: (parent: RollResultParent) => countResult(parent.rollResult)},
-    details: { type: new GraphQLList(GraphQLInt), resolve: (parent: RollResultParent) => parent.rollResult.map(({result}) => result) }
+    total: {
+      type: new  GraphQLNonNull(GraphQLInt),
+      resolve: (parent: RollResultParent) => countResult(parent.rollResult)
+    },
+    details: {
+      type: new GraphQLList(GraphQLInt),
+      resolve: (parent: RollResultParent) => parent.rollResult.map(({result}) => result)
+    }
   }
 })
 
@@ -42,8 +57,14 @@ interface RollParent { roll: Dice[] }
 const RollType = new GraphQLObjectType({
   name: 'Roll',
   fields: {
-    result: { type: RollResultType, resolve: (parent: RollParent) => ({...parent, rollResult: rollDice(parent.roll)}) },
-    statistics: { type: RollStatsType, resolve: (parent: RollParent) => parent }
+    result: {
+      type: new GraphQLNonNull(RollResultType),
+      resolve: (parent: RollParent) => ({...parent, rollResult: rollDice(parent.roll)})
+    },
+    statistics: {
+      type: new GraphQLNonNull(RollStatsType),
+      resolve: (parent: RollParent) => parent
+    }
   }
 })
 
