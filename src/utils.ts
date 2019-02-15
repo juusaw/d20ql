@@ -1,4 +1,4 @@
-export function rangeTo(n) {
+export function rangeTo(n: number) {
   if (n === 0) return []
   return new Array(Math.abs(n)).fill(undefined).map((_, i) => n / Math.abs(n) * (i + 1))
 }

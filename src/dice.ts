@@ -24,7 +24,7 @@ function validateDiceString(input: string): boolean {
 
 function diceToDieArr({ amount, sides }: Dice): Die[] {
   if (amount === 0) return []
-  return new Array(Math.abs(amount)).fill(amount / Math.abs(amount) * sides)
+  return new Array(Math.abs(amount)).fill({sides: amount / Math.abs(amount) * sides})
 }
 
 export function parseDice(inputStr: string): Dice[] | null {
@@ -74,7 +74,7 @@ export function calculateMin(dice: Dice[]) {
 }
 
 export function getDistribution(dice: Dice[]) {
-  const diceRanges = dice.flatMap(diceToDieArr).map(rangeTo)
+  const diceRanges = dice.flatMap(diceToDieArr).map(die => rangeTo(die.sides))
   const possibleResults = cartesian(diceRanges)
   return possibleResults.map(resultArr => resultArr.reduce((a, b) => a + b, 0)).sort((a, b) => a - b)
 }
