@@ -1,41 +1,14 @@
 import { ApolloServer } from 'apollo-server'
-import { GraphQLSchema, GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLNonNull, GraphQLFloat } from 'graphql'
-
-type Dice = [number, number]
-
-function parseDice(inputStr: string): Dice[] {
-  const diceStrs = inputStr.match(/([+|-]?\d*d\d+)/g) || []
-  const constStrs = (inputStr.match(/([\+|-]\d+)[+|-]/g) || []).map(x => x.slice(0, -1))
-    .concat((inputStr.match(/([\+|-]\d+)$/) || []).slice(1))
-  // TODO: Add starting constant without + or - case to consts
-  const dice = diceStrs.map(ds => ds.split('d').map(d => parseInt(d, 10)) as Dice)
-  const constDice = constStrs.map(cs => [parseInt(cs, 10), 1] as Dice)
-  return dice.concat(constDice)
-}
-
-function countResult(dice: Dice[]) {
-  return dice
-    .map(([multiplier, sides]) => multiplier * Math.floor(Math.random() * sides + 1))
-    .reduce((a, b) => a + b, 0)
-}
-
-function calculateMean(dice: Dice[]) {
-  return dice
-    .map(([multiplier, sides]) => multiplier * (sides + 1) / 2)
-    .reduce((a, b) => a + b, 0)
-}
-
-function calculateMax(dice: Dice[]) {
-  return dice
-    .map(([multiplier, sides]) => multiplier * (multiplier > 0 ? sides : 1))
-    .reduce((a, b) => a + b, 0)
-}
-
-function calculateMin(dice: Dice[]) {
-  return dice
-    .map(([multiplier, sides]) => multiplier * (multiplier > 0 ? 1 : sides))
-    .reduce((a, b) => a + b, 0)
-}
+import {
+  GraphQLSchema,
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLInt,
+  GraphQLNonNull,
+  GraphQLFloat,
+  GraphQLList
+} from 'graphql'
+import { Dice, parseDice, calculateMax, calculateMean, calculateMin, countResult, rollDice } from './dice'
 
 const RollStatsType =  new GraphQLObjectType({
   name: 'Statistics',
@@ -47,9 +20,17 @@ const RollStatsType =  new GraphQLObjectType({
 })
 
 const RollResultType = new GraphQLObjectType({
+  name: 'Results',
+  fields: {
+    total: { type: GraphQLInt, resolve: parent => parent.rollResult.reduce((a, b) => a + b, 0)},
+    details: { type: new GraphQLList(GraphQLInt), resolve: parent => parent.rollResult }
+  }
+})
+
+const RollType = new GraphQLObjectType({
   name: 'Roll',
   fields: {
-    result: { type: GraphQLInt, resolve: (parent: {roll: Dice[]}) => countResult(parent.roll) },
+    result: { type: RollResultType, resolve: (parent: {roll: Dice[]}) => ({...parent, rollResult: rollDice(parent.roll)}) },
     statistics: { type: RollStatsType, resolve: parent => parent }
   }
 })
@@ -59,7 +40,7 @@ const schema = new GraphQLSchema({
     name: 'Query',
     fields: {
       roll: {
-        type: RollResultType,
+        type: RollType,
         description: 'Roll a dice. Example argument: 2d12+5',
         args: {
           dice: {
@@ -78,10 +59,3 @@ const server = new ApolloServer({ schema })
 server.listen().then(({ url }) => {
   console.log(`🚀 Server ready at ${url}`);
 })
-
-
-// (\d*d\d+)
-
-// [\+|-]\d+
-
-// ([\+|-]\d+)[\+|-]
