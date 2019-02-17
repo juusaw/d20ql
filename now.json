@@ -2,7 +2,7 @@
   "version": 2,
   "name": "d20ql",
   "builds": [
-      { "src": "src/index.ts", "use": "@now/node@canary" }
+      { "src": "src/micro.ts", "use": "@now/node@canary" }
   ],
-  "routes": [{ "src": "/(.*)", "dest": "src/index.ts" }]
+  "routes": [{ "src": "/(.*)", "dest": "src/micro.ts" }]
 }

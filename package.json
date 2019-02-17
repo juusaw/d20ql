@@ -5,10 +5,10 @@
   "author": "juusaw",
   "license": "MIT",
   "dependencies": {
+    "apollo-server": "^2.4.2",
     "apollo-server-micro": "^2.4.0",
     "graphql": "^14.1.1",
     "micro": "^9.3.3",
-    "ts-node": "^8.0.2",
     "typescript": "^3.3.3"
   },
   "scripts": {
@@ -19,6 +19,7 @@
     "@types/graphql": "^14.0.7",
     "@types/jest": "^24.0.5",
     "jest": "^24.1.0",
-    "ts-jest": "^23.10.5"
+    "ts-jest": "^23.10.5",
+    "ts-node": "^8.0.2"
   }
 }

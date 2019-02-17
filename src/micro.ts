@@ -1,4 +1,4 @@
-import { ApolloServer } from 'apollo-server'
+import { ApolloServer } from 'apollo-server-micro'
 import { schema } from './graphql'
 
 export const server = new ApolloServer({
@@ -7,6 +7,4 @@ export const server = new ApolloServer({
   playground: true
 })
 
-server.listen().then(({ url }) => {
-  console.log(`🚀 Server ready at ${url}`);
-})
+export default server.createHandler()
