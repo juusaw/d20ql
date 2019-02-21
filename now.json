@@ -4,5 +4,11 @@
   "builds": [
       { "src": "src/micro.ts", "use": "@now/node@canary" }
   ],
-  "routes": [{ "src": "/(.*)", "dest": "src/micro.ts" }]
+  "routes": [{
+    "src": "/(.*)",
+    "dest": "src/micro.ts",
+    "headers": {
+      "Access-Control-Allow-Origin": "*"
+    }
+  }]
 }
