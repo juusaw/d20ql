@@ -36,7 +36,7 @@ const RollStatsType = new GraphQLObjectType({
       resolve: (parent: RollStatsParent) => calculateMin(parent.roll)
     },
     distribution: {
-      type: new GraphQLList(GraphQLInt),
+      type: new GraphQLList(new GraphQLNonNull(GraphQLInt)),
       resolve: (parent: RollStatsParent) => getDistribution(parent.roll)
     }
   }
@@ -51,7 +51,7 @@ const RollResultType = new GraphQLObjectType({
       resolve: (parent: RollResultParent) => countResult(parent.rollResult)
     },
     details: {
-      type: new GraphQLList(GraphQLInt),
+      type: new GraphQLList(new GraphQLNonNull(GraphQLInt)),
       resolve: (parent: RollResultParent) => parent.rollResult.map(({ result }) => result)
     }
   }
