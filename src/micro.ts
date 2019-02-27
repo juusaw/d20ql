@@ -1,4 +1,5 @@
 import { ApolloServer } from 'apollo-server-micro'
+import cors from 'micro-cors'
 import { schema } from './graphql'
 
 export const server = new ApolloServer({
@@ -7,4 +8,4 @@ export const server = new ApolloServer({
   playground: true
 })
 
-export default server.createHandler()
+export default cors()(server.createHandler())
