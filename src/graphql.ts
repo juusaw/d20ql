@@ -16,8 +16,11 @@ import {
   calculateMin,
   rollDice,
   countResult,
+  getRollComplexity,
   getDistribution
 } from './dice'
+
+const MAX_COMPLEXITY = 10e10
 
 interface RollStatsParent extends RollParent { }
 const RollStatsType = new GraphQLObjectType({
@@ -37,7 +40,10 @@ const RollStatsType = new GraphQLObjectType({
     },
     distribution: {
       type: new GraphQLList(new GraphQLNonNull(GraphQLInt)),
-      resolve: (parent: RollStatsParent) => getDistribution(parent.roll)
+      resolve: (parent: RollStatsParent) =>
+        getRollComplexity(parent.roll) <= MAX_COMPLEXITY
+          ? getDistribution(parent.roll)
+          : []
     }
   }
 })

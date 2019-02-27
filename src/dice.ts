@@ -73,6 +73,10 @@ export function calculateMin(dice: Dice[]) {
     .reduce((a, b) => a + b, 0)
 }
 
+export function getRollComplexity(dice: Dice[]) {
+  return dice.reduce((total, dice) => total * dice.sides ** dice.amount, 1)
+}
+
 export function getDistribution(dice: Dice[]) {
   const diceRanges = dice.flatMap(diceToDieArr).map(die => rangeTo(die.sides))
   const possibleResults = cartesian(diceRanges)
