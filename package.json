@@ -9,7 +9,6 @@
     "apollo-server-micro": "^2.4.0",
     "graphql": "^14.1.1",
     "micro": "^9.3.3",
-    "micro-cors": "^0.1.1",
     "typescript": "^3.3.3"
   },
   "scripts": {

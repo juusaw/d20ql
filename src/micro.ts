@@ -1,6 +1,13 @@
 import { ApolloServer } from 'apollo-server-micro'
-import cors from 'micro-cors'
 import { schema } from './graphql'
+
+const withCors: any = (handler: any) => (req: any, res: any, ...args: any) => {
+  if (req.method === 'OPTIONS')
+    res.end()
+  else {
+    return handler(req, res, ...args)
+  }
+}
 
 export const server = new ApolloServer({
   schema,
@@ -8,4 +15,4 @@ export const server = new ApolloServer({
   playground: true
 })
 
-export default cors()(server.createHandler())
+export default withCors((server.createHandler()))
