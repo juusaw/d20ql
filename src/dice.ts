@@ -33,6 +33,7 @@ export function parseDice(inputStr: string): Dice[] | null {
   const constStrs = (inputStr.match(/([\+|-]\d+)[+|-]/g) || []).map(x => x.slice(0, -1))
     .concat((inputStr.match(/([\+|-]\d+)$/) || []).slice(1)) // trailing
     .concat((inputStr.match(/(^\d+)[+|-]/) || []).slice(1)) // leading
+    .concat((inputStr.match(/^(^\d+)$/) || []).slice(1)) // lone
   const dice = diceStrs.map(ds => {
     const [amount, sides] = ds.split('d').map(d => parseInt(d, 10))
     return { amount: Number.isNaN(amount) ? 1 : amount, sides }

@@ -9,7 +9,9 @@ test('Parser', () => {
     { string: '3d8-10', result: [{ amount: 3, sides: 8}, { amount: -10, sides: 1 }] },
     { string: '3dd', result: null },
     { string: '1d6+-1', result: null },
-    { string: 'd6', result: [{ amount: 1, sides: 6 }]}
+    { string: 'd6', result: [{ amount: 1, sides: 6 }]},
+    { string: '10', result: [{ amount: 10, sides: 1}]},
+    { string: '-10', result: [{ amount: -10, sides: 1}]},
   ]
   cases.forEach(({ string, result }) =>
     expect(dice.parseDice(string)).toEqual(result))
